@@ -1,0 +1,442 @@
+html,
+body {
+    font-family: 'Poppins', sans-serif;
+    height: auto;
+    width: 100%;
+    margin: 0;
+    overflow-y: auto;
+    min-height: 100vh;
+    background-image: linear-gradient(to left right, #ebe2f7, #aaa2ec);
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+.bg-motivate {
+    background-image: linear-gradient(to left right, #ebe2f7, #aaa2ec);
+    color: #1507AC;
+}
+
+.dropdownUser {
+    background-image: linear-gradient(to left right, #ebe2f7, #aaa2ec);
+    color: #1507AC;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(108%);
+}
+
+
+.thead-dark th {
+    color: #1507AC;
+}
+
+.login {
+    background-image: linear-gradient(to top right, #ebe2f7, #aaa2ec);
+    background-repeat: no-repeat;
+    overflow: hidden;
+    background-position: center;
+    background-size: 100% 100%;
+}
+
+.login-left {
+    color: rgb(255, 255, 255);
+    text-align: left;
+    text-justify: unset;
+    display: flex;
+    align-items: end;
+    justify-content: end;
+    height: 777px;
+    background-image: url('../images/img_login.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-radius: 5%;
+}
+
+.login-left img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: inherit;
+    height: 100%;
+    z-index: -1;
+}
+
+.login-left h1 {
+    font-size: 64px;
+    font-weight: 900;
+}
+
+.login-left h2 {
+    font-size: 36px;
+    font-weight: 900;
+    text-align: right;
+}
+
+.login-left span {
+    font-size: 24px;
+}
+
+.login-left p {
+    color: #6BAEF6;
+}
+
+.login-right {
+    line-height: 1.6;
+}
+
+.login-right h1 {
+    font-size: 40px;
+    font-weight: 700;
+}
+
+.login-right h1,
+p {
+    text-align: left;
+    color: #1507AC;
+}
+
+.login-right button {
+    background-color: #1507AC;
+    color: white;
+    width: 100%;
+}
+
+.img-fluid-logo {
+    height: auto;
+    width: 30%;
+}
+
+.visibleMobile {
+    display: none;
+}
+
+
+.nombre_usuario {
+    color: #1507AC;
+    font-weight: 700;
+}
+
+.puntos {
+    background-color: #ffffff;
+    padding: 5px;
+    border-radius: 20px;
+}
+
+.actividad {
+    background-color: #EAE8FF;
+}
+
+.actividad :hover {
+    border-color: #1507AC;
+}
+
+a {
+    text-decoration: none;
+}
+
+.text-100 {
+    color: #00C738;
+    font-family: Poppins;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+}
+
+.text-70 {
+    color: #FFE500;
+    font-family: Poppins;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+}
+
+.text-60 {
+    color: #FF8A00;
+    font-family: Poppins;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 48px
+}
+
+.text-40 {
+    color: #F00;
+    font-family: Poppins;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+}
+
+.pl-sanciones {
+    padding-top: 10px;
+    padding-left: 25%;
+}
+
+.parpadea {
+    animation-name: parpadeo;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    -webkit-animation-name: parpadeo;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+}
+
+/*bar nav */
+body {
+
+    background: #304FFE;
+}
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: none !important;
+}
+
+
+
+.ml-especial-score {
+    margin-left: 2.5%;
+}
+
+.p-especial-modal {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+
+
+
+
+@keyframes beatHeart {
+    0% {
+        transform: scale(0.9);
+    }
+
+    25% {
+        transform: scale(1.1);
+    }
+
+    40% {
+        transform: scale(0.9);
+    }
+
+    60% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(0.9);
+    }
+}
+
+
+/* ------  Connection --------  */
+
+.connection {}
+
+.connection-dropdown {}
+
+.connection-list {
+    width: 300px;
+    padding: 20px;
+}
+
+.connection-item {
+    border-radius: 3px;
+    line-height: 32px;
+    text-align: center;
+    padding: 12px 7px 4px;
+    display: block;
+    border: 1px solid transparent;
+    color: #3d405c;
+    font-size: 12px;
+}
+
+.connection-item img {
+    width: 32px;
+}
+
+.connection-item:hover {
+    background-color: #fff;
+    border: 1px solid #e6e6f2;
+}
+
+.connection-item span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* ----- User Nav Dropdown -----*/
+
+.nav-user {}
+
+.nav-user-dropdown {
+    padding: 0px;
+    min-width: 230px;
+    margin: 0px;
+}
+
+.nav-user-name {}
+
+.nav-user-info {
+    background-color: #5969ff;
+    line-height: 1.4;
+    padding: 12px;
+    color: #fff;
+    font-size: 13px;
+    border-radius: 2px 2px 0 0;
+}
+
+.nav-user-info .status {
+    float: left;
+    top: 7px;
+    left: 0px;
+}
+
+.nav-user-dropdown {}
+
+.nav-user-dropdown .dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 12px 22px 15px;
+    clear: both;
+    font-weight: 400;
+    color: #686972;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+    font-size: 13px;
+    line-height: 0.4;
+}
+
+.nav-user-dropdown .dropdown-item:hover {
+    background-color: #f7f7fb;
+}
+
+/*---- User icon sizes ---*/
+
+.user-avatar-xxl {
+    height: 128px;
+    width: 128px;
+}
+
+.user-avatar-xl {
+    height: 90px;
+    width: 90px;
+}
+
+.user-avatar-lg {
+    height: 48px;
+    width: 48px;
+}
+
+.user-avatar-md {
+    height: 32px;
+    width: 32px;
+}
+
+.user-avatar-sm {
+    height: 24px;
+    width: 24px;
+}
+
+.user-avatar-xs {
+    height: 18px;
+    width: 18px;
+}
+
+
+
+.avatar {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    border: 2px solid #F7F9FA;
+    background: #F7F9FA;
+    color: #fff;
+}
+
+
+.media-attachment div.avatar {
+    border: none;
+}
+
+.avatar.bg-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar.bg-primary i {
+    font-size: 14px;
+}
+
+
+
+@-moz-keyframes parpadeo {
+    0% {
+        opacity: 1.0;
+    }
+
+    50% {
+        opacity: 0.0;
+    }
+
+    100% {
+        opacity: 1.0;
+    }
+}
+
+@-webkit-keyframes parpadeo {
+    0% {
+        opacity: 1.0;
+    }
+
+    50% {
+        opacity: 0.0;
+    }
+
+    100% {
+        opacity: 1.0;
+    }
+}
+
+@keyframes parpadeo {
+    0% {
+        opacity: 1.0;
+    }
+
+    50% {
+        opacity: 0.0;
+    }
+
+    100% {
+        opacity: 1.0;
+    }
+}
+
+.logo-responsive{
+    width: -webkit-fill-available;
+}
+
+
+@media only screen and (max-width: 980px) {
+    .visibleDesktop {
+        display: none;
+    }
+
+    .visibleMobile {
+        display: block;
+    }
+}
