@@ -22,15 +22,30 @@ class Welcome extends CI_Controller
 		$cedula = $this->input->post('cedula');
 		$login = $this->Programa_motivate_model->login($cedula);
 		if ($login) {
-			$userLogin = array(
-				'logueado' => TRUE,
-				'idUser' => $login[0]->idcolaborador,
-				'nombre' => $login[0]->nombre,
-				'apellido' => $login[0]->apellido,
-				'cargo' => $login[0]->cargo,
-			);
-			$this->session->set_userdata($userLogin);
-			redirect('Welcome/main');
+			if ($login[0]->tipoUsuario == "Colaborador") {
+				$userLogin = array(
+					'logueado' => TRUE,
+					'idUser' => $login[0]->idcolaborador,
+					'nombre' => $login[0]->nombre,
+					'apellido' => $login[0]->apellido,
+					'cargo' => $login[0]->cargo,
+					'tipoUsuario' => $login[0]->tipoUsuario
+				);
+				$this->session->set_userdata($userLogin);
+				redirect('Welcome/main');
+			}
+			else {
+				$userLogin = array(
+					'logueado' => TRUE,
+					'idUser' => $login[0]->idcolaborador,
+					'nombre' => $login[0]->nombre,
+					'apellido' => $login[0]->apellido,
+					'cargo' => $login[0]->cargo,
+					'tipoUsuario' => $login[0]->tipoUsuario
+				);
+				$this->session->set_userdata($userLogin);
+				redirect('Welcome/admin');
+			}
 		}
 	}
 
@@ -128,4 +143,54 @@ class Welcome extends CI_Controller
 		}
 
 	}
+
+	public function admin()
+	{
+		date_default_timezone_set("America/Bogota");
+		$date = date('H');
+		$mensajeBienvenida = "";
+
+		$nombres = $this->session->userdata('nombre');
+		$primerNombre = explode(" ", $nombres);
+		$nombre = $primerNombre[0];
+
+		if ($date >= "00" && $date <= "11") {
+			$mensajeBienvenida = "Buenos días";
+		} elseif ($date >= "12" && $date <= "18") {
+			$mensajeBienvenida = "Buenas tardes";
+		} else {
+			$mensajeBienvenida = "Buenas noches";
+		}
+		$result['mensajeBienvenida'] = $mensajeBienvenida;
+		$result['nombre'] = $nombre;
+
+		$result['todosColaboradores']=$this->Programa_motivate_model->traerColaboradores();
+		$result['todasEmpresas']=$this->Programa_motivate_model->traerEmpresas();
+
+
+		
+		$this->load->view("main/header",$result);
+		$this->load->view("admin",$result);
+		$this->load->view("main/footer");
+
+	}
+
+	public function guardar_colaborador()
+	{
+        $data = array(
+            'nombre' => $this->input->post('nombre'),
+            'apellido' => $this->input->post('apellido'),
+            'cedula' => $this->input->post('cedula'),
+            'fechaIngreso' => $this->input->post('fechaIngreso'),
+            'correoElectronico' => $this->input->post('correoElectronico'),
+            'id_empresa' => $this->input->post('id_empresa'),
+            'tipoUsuario' => $this->input->post('tipoUsuario'),
+        );
+
+        // Llama al método del modelo para realizar la inserción
+        $this->Programa_motivate_model->insertar_colaborador($data);
+		
+		$this->admin();
+	}
+
 }

@@ -127,4 +127,32 @@ class Programa_motivate_model extends CI_Model
         $this->db->where('idColaborador', $id);
         return true;
     }
+
+    public function traerColaboradores()
+    {
+        $this->db->select('e.nombre as nombreempresa, c.nombre as nombrecolab, e.*, c.*');
+        $this->db->join('empresa e', 'e.idempresa = c.id_empresa');
+        $this->db->order_by('c.idcolaborador', 'asc');
+        $query = $this->db->get('colaborador c');
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return false;
+        }
+    }
+
+    public function traerEmpresas()
+    {
+        $this->db->select('*');
+        $query = $this->db->get('empresa');
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return false;
+        }
+    }
+
+    public function insertar_colaborador($data) {
+        $this->db->insert('colaborador', $data);
+    }
 }
