@@ -27,7 +27,7 @@
                                     <td><?= $colab->apellido ?></td>
                                     <td><?= $colab->cedula ?></td>
                                     <td><?= $colab->nombreempresa ?></td>
-                                    <td><a>Ver</a><a>Editar</a><a>Eliminar</a></td>
+                                    <td><a href="#" class="stretched-link">Ver </a><a href="#" class="stretched-link">Editar </a><a href="#" class="stretched-link">Eliminar</a></td>
                                 </tr>
                             <?php } ?>
                         <?php } ?>
@@ -72,7 +72,7 @@
                             <select name="id_empresa" class="custom-select">
                                 <option selected>Selecciona una empresa</option>
                                 <?php foreach ($todasEmpresas as $empresas) { ?>
-                                <option value="<?= $empresas->idempresa ?>"><?= $empresas->nombre ?></option>
+                                    <option value="<?= $empresas->idempresa ?>"><?= $empresas->nombre ?></option>
                                 <?php } ?>
                             </select>
                         </div>
@@ -94,8 +94,6 @@
             </div>
         </div>
     </div>
-
-    
 
 <?php } else { ?>
     <?php redirect('welcome/logout'); ?>

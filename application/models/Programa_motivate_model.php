@@ -155,4 +155,8 @@ class Programa_motivate_model extends CI_Model
     public function insertar_colaborador($data) {
         $this->db->insert('colaborador', $data);
     }
+
+    public function guardar_actividades($data) {
+        $this->db->insert('actividades', $data);
+    }
 }

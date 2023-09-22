@@ -192,5 +192,79 @@ class Welcome extends CI_Controller
 		
 		$this->admin();
 	}
+	
+	public function Actividades()
+	{
+		date_default_timezone_set("America/Bogota");
+		$date = date('H');
+		$mensajeBienvenida = "";
 
+		$nombres = $this->session->userdata('nombre');
+		$primerNombre = explode(" ", $nombres);
+		$nombre = $primerNombre[0];
+
+		if ($date >= "00" && $date <= "11") {
+			$mensajeBienvenida = "Buenos días";
+		} elseif ($date >= "12" && $date <= "18") {
+			$mensajeBienvenida = "Buenas tardes";
+		} else {
+			$mensajeBienvenida = "Buenas noches";
+		}
+		$result['mensajeBienvenida'] = $mensajeBienvenida;
+		$result['nombre'] = $nombre;
+		$result['todasActividades']=$this->Programa_motivate_model->actividades();
+
+		$this->load->view("main/header",$result);
+		$this->load->view('actividades',$result);
+		$this->load->view('main/footer');
+	}
+
+	public function guardar_actividad()
+	{
+		$config['upload_path'] = './public/images/actividades/';
+		$config['allowed_types'] = 'gif|jpg|jpeg|png'; // Tipos de archivos permitidos
+		$config['max_size'] = 2048; // Tamaño máximo en kilobytes (2MB)
+	
+		$this->load->library('upload', $config);
+	
+		if (!$this->upload->do_upload('imagen')) {
+			// Error al cargar la imagen
+			$error = $this->upload->display_errors();
+			echo "Error al cargar la imagen: $error";
+		} else {
+			// La imagen se cargó correctamente
+			$imagen_data = $this->upload->data();
+			$imagen_nombre = $imagen_data['file_name'];
+	
+			// Configura la carga de archivos para el código QR
+			$config['upload_path'] = './public/images/qr/';
+	
+			$this->upload->initialize($config);
+	
+			if (!$this->upload->do_upload('qr')) {
+				// Error al cargar el código QR
+				$error = $this->upload->display_errors();
+				echo "Error al cargar el código QR: $error";
+			} else {
+				// El código QR se cargó correctamente
+				$qr_data = $this->upload->data();
+				$qr_nombre = $qr_data['file_name'];
+	
+				// Ahora puedes guardar la información en la base de datos, incluyendo los nombres de archivo de imagen y código QR
+				$data = array(
+					'nombre' => $this->input->post('nombre'),
+					'imagen' => $imagen_nombre,
+					'descripcion' => $this->input->post('descripcion'),
+					'qr' => $qr_nombre,
+					'mensajeQr' => $this->input->post('mensajeQr'),
+				);
+	
+				// Llama al método del modelo para realizar la inserción
+				$this->Programa_motivate_model->guardar_actividades($data);
+
+				redirect('welcome/actividades');
+			}
+		}
+	}
+	
 }
