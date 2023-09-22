@@ -228,29 +228,25 @@ class Welcome extends CI_Controller
 		$this->load->library('upload', $config);
 	
 		if (!$this->upload->do_upload('imagen')) {
-			// Error al cargar la imagen
+
 			$error = $this->upload->display_errors();
 			echo "Error al cargar la imagen: $error";
 		} else {
-			// La imagen se cargó correctamente
+
 			$imagen_data = $this->upload->data();
 			$imagen_nombre = $imagen_data['file_name'];
 	
-			// Configura la carga de archivos para el código QR
 			$config['upload_path'] = './public/images/qr/';
 	
 			$this->upload->initialize($config);
 	
 			if (!$this->upload->do_upload('qr')) {
-				// Error al cargar el código QR
 				$error = $this->upload->display_errors();
 				echo "Error al cargar el código QR: $error";
 			} else {
-				// El código QR se cargó correctamente
 				$qr_data = $this->upload->data();
 				$qr_nombre = $qr_data['file_name'];
 	
-				// Ahora puedes guardar la información en la base de datos, incluyendo los nombres de archivo de imagen y código QR
 				$data = array(
 					'nombre' => $this->input->post('nombre'),
 					'imagen' => $imagen_nombre,
@@ -258,8 +254,7 @@ class Welcome extends CI_Controller
 					'qr' => $qr_nombre,
 					'mensajeQr' => $this->input->post('mensajeQr'),
 				);
-	
-				// Llama al método del modelo para realizar la inserción
+
 				$this->Programa_motivate_model->guardar_actividades($data);
 
 				redirect('welcome/actividades');
