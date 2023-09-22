@@ -152,11 +152,34 @@ class Programa_motivate_model extends CI_Model
         }
     }
 
-    public function insertar_colaborador($data) {
+    public function insertar_colaborador($data)
+    {
         $this->db->insert('colaborador', $data);
     }
 
-    public function guardar_actividades($data) {
+    public function guardar_actividades($data)
+    {
         $this->db->insert('actividades', $data);
+    }
+
+    public function detallesEditar($id)
+    {
+        $this->db->select('*');
+        $this->db->where("idactividades", $id);
+        $query = $this->db->get('actividades');
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return false;
+        }
+    }
+
+
+    public function actualizarActividad($data, $idActividad)
+    {
+        $this->db->update('actividades',$data);
+        $this->db->where('idactividades',$idActividad);
+        return true;
+
     }
 }
