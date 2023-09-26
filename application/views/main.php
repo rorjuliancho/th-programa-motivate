@@ -211,7 +211,7 @@
                                     <div class="container">
                                         <div class="row  text-center">
                                             <div class="col-lg-4 col-md-4 col-sm-12">
-                                                <img src="<?= base_url() ?>public/images/actividades/<?= $a->imagen ?>" alt="Programa Motivate">
+                                                <img style="width: 2.9em; height: 2.9em;" src="<?= base_url() ?>public/images/actividades/<?= $a->imagen ?>" alt="Programa Motivate">
                                             </div>
                                             <div class="col-lg-8 col-md-8 col-sm-12 my-auto">
                                                 <h5><?= $a->puntuacion ?> puntos</h5>

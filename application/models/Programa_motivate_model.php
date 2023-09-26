@@ -177,9 +177,8 @@ class Programa_motivate_model extends CI_Model
 
     public function actualizarActividad($data, $idActividad)
     {
-        $this->db->update('actividades',$data);
-        $this->db->where('idactividades',$idActividad);
+        $this->db->where('idactividades', $idActividad);
+        $this->db->update('actividades', $data);
         return true;
-
     }
 }

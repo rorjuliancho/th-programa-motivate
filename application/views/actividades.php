@@ -74,12 +74,12 @@
                         <?php if ($todasActividades) { ?>
                             <?php foreach ($todasActividades as $actividad) { ?>
                                 <tr>
-                                    <td><img class="img-fluid" src="<?= base_url() ?>public/images/actividades/<?= $actividad->imagen ?>"></td>
+                                    <td><img style="width: 3em; height: 3em;" class="img-fluid" src="<?= base_url() ?>public/images/actividades/<?= $actividad->imagen ?>"></td>
                                     <th scope="row"><?= $actividad->idactividades ?></th>
                                     <td><?= $actividad->nombre ?></td>
                                     <td>
-                                        <a href="<?= base_url() ?>Welcome/editarActividades/<?= $actividad->idactividades ?>">Editar</a>
-                                        <!--<a href="#" class="stretched-link" data-toggle="modal" data-target="#modalVer">Editar </a><a href="#" class="stretched-link">Eliminar</a> -->
+                                        <a href="<?= base_url() ?>Welcome/editarActividades/<?= $actividad->idactividades?>">Editar</a>
+                                         <!--<a href="#" class="stretched-link" data-toggle="modal" data-target="#modalVer">Editar </a><a href="#" class="stretched-link">Eliminar</a> -->
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -93,7 +93,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ingrese los de la actividad:</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Ingrese los datos de la actividad:</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

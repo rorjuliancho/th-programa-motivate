@@ -209,7 +209,7 @@ class Welcome extends CI_Controller
 		$result['mensajeBienvenida'] = $mensajeBienvenida;
 		$result['nombre'] = $nombre;
 		$result['todasActividades'] = $this->Programa_motivate_model->actividades();
-		$result['detalleActividad'] = $this->Programa_motivate_model->detallesEditar($id);
+		// $result['detalleActividad'] = $this->Programa_motivate_model->detallesEditar($id);
 
 
 		$this->load->view("main/header", $result);
@@ -225,14 +225,12 @@ class Welcome extends CI_Controller
 		$this->load->library('upload', $config);
 
 		if (!$this->upload->do_upload('imagen')) {
-
 			$error = $this->upload->display_errors();
 			echo "Error al cargar la imagen: $error";
 		} else {
-
 			$imagen_data = $this->upload->data();
 			$imagen_nombre = $imagen_data['file_name'];
-			$this->redimensionarImagen($a);
+			// $this->redimensionarImagen($a);
 
 			$config['upload_path'] = './public/images/qr/';
 			$config['allowed_types'] = 'png'; // Tipos de archivos permitidos
@@ -245,7 +243,7 @@ class Welcome extends CI_Controller
 			} else {
 				$qr_data = $this->upload->data();
 				$qr_nombre = $qr_data['file_name'];
-				$this->redimensionarQR($qr_nombre);
+				// $this->redimensionarQR($qr_nombre);
 				$data = array(
 					'nombre' => $this->input->post('nombre'),
 					'imagen' => $imagen_nombre,
@@ -366,11 +364,11 @@ class Welcome extends CI_Controller
 		$qr = $_FILES['qr']['name'];
 		$mensajeQr = $this->input->post('mensajeQr');
 
-		/* echo ($nombreActividad);
-		echo ($iconoActividad);
-		echo ($descripcion);
-		echo ($qr);
-		echo ($mensajeQr); */
+		// echo ($nombreActividad);
+		// echo ($iconoActividad);
+		// echo ($descripcion);
+		// echo ($qr);
+		// echo ($mensajeQr);
 
 
 		// si la imagen es vacia entonces deje los cambios
@@ -381,10 +379,10 @@ class Welcome extends CI_Controller
 				'nombre' => $nombreActividad,
 				'fechaCreacion' => $date,
 				'descripcion' => $descripcion,
-				'mewnsajeQr' => $mensajeQr
+				'mensajeQr' => $mensajeQr,
 			);
 			$this->Programa_motivate_model->actualizarActividad($data, $idActividad);
-			redirect('Actividades');
+			redirect('welcome/actividades');
 		} else {
 			$a = $_FILES['imagen']['name'];
 			$config['upload_path'] = './public/images/actividades/';
@@ -399,8 +397,8 @@ class Welcome extends CI_Controller
 
 				$imagen_data = $this->upload->data();
 				$imagen_nombre = $imagen_data['file_name'];
-				$this->redimensionarImagen($a);
-				exit;
+				// $this->redimensionarImagen($a);
+				// exit;
 
 				$config['upload_path'] = './public/images/qr/';
 				$config['allowed_types'] = 'png'; // Tipos de archivos permitidos
@@ -413,7 +411,7 @@ class Welcome extends CI_Controller
 				} else {
 					$qr_data = $this->upload->data();
 					$qr_nombre = $qr_data['file_name'];
-					$this->redimensionarQR($qr_nombre);
+					// $this->redimensionarQR($qr_nombre);
 					$data = array(
 						'nombre' => $this->input->post('nombreActividad'),
 						'imagen' => $imagen_nombre,
@@ -425,7 +423,7 @@ class Welcome extends CI_Controller
 				}
 			}
 
-			redirect('Actividades');
+			redirect('welcome/actividades');
 		}
 	}
 }
