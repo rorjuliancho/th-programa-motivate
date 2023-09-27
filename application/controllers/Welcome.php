@@ -1,8 +1,14 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+require_once('./vendor/autoload.php');
+
+use PhpOffice\PhpSpreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
 class Welcome extends CI_Controller
 {
+
 	function __construct()
 	{
 		parent::__construct();
@@ -210,7 +216,7 @@ class Welcome extends CI_Controller
 		$result['mensajeBienvenida'] = $mensajeBienvenida;
 		$result['nombre'] = $nombre;
 		$result['todasActividades'] = $this->Programa_motivate_model->actividades();
-		$result['detalleActividad'] = $this->Programa_motivate_model->detallesEditar($id);
+		// $result['detalleActividad'] = $this->Programa_motivate_model->detallesEditar($id);
 
 
 		$this->load->view("main/header", $result);
@@ -226,14 +232,12 @@ class Welcome extends CI_Controller
 		$this->load->library('upload', $config);
 
 		if (!$this->upload->do_upload('imagen')) {
-
 			$error = $this->upload->display_errors();
 			echo "Error al cargar la imagen: $error";
 		} else {
-
 			$imagen_data = $this->upload->data();
 			$imagen_nombre = $imagen_data['file_name'];
-			$this->redimensionarImagen($a);
+			// $this->redimensionarImagen($a);
 
 			$config['upload_path'] = './public/images/qr/';
 			$config['allowed_types'] = 'png'; // Tipos de archivos permitidos
@@ -246,7 +250,7 @@ class Welcome extends CI_Controller
 			} else {
 				$qr_data = $this->upload->data();
 				$qr_nombre = $qr_data['file_name'];
-				$this->redimensionarQR($qr_nombre);
+				// $this->redimensionarQR($qr_nombre);
 				$data = array(
 					'nombre' => $this->input->post('nombre'),
 					'imagen' => $imagen_nombre,
@@ -368,11 +372,11 @@ class Welcome extends CI_Controller
 		$qr = $_FILES['qr']['name'];
 		$mensajeQr = $this->input->post('mensajeQr');
 
-		/* echo ($nombreActividad);
-		echo ($iconoActividad);
-		echo ($descripcion);
-		echo ($qr);
-		echo ($mensajeQr); */
+		// echo ($nombreActividad);
+		// echo ($iconoActividad);
+		// echo ($descripcion);
+		// echo ($qr);
+		// echo ($mensajeQr);
 
 
 		// si la imagen es vacia entonces deje los cambios
@@ -383,10 +387,10 @@ class Welcome extends CI_Controller
 				'nombre' => $nombreActividad,
 				'fechaCreacion' => $date,
 				'descripcion' => $descripcion,
-				'mewnsajeQr' => $mensajeQr
+				'mensajeQr' => $mensajeQr,
 			);
 			$this->Programa_motivate_model->actualizarActividad($data, $idActividad);
-			redirect('Actividades');
+			redirect('welcome/actividades');
 		} else {
 			$a = $_FILES['imagen']['name'];
 			$config['upload_path'] = './public/images/actividades/';
@@ -401,8 +405,8 @@ class Welcome extends CI_Controller
 
 				$imagen_data = $this->upload->data();
 				$imagen_nombre = $imagen_data['file_name'];
-				$this->redimensionarImagen($a);
-				exit;
+				// $this->redimensionarImagen($a);
+				// exit;
 
 				$config['upload_path'] = './public/images/qr/';
 				$config['allowed_types'] = 'png'; // Tipos de archivos permitidos
@@ -415,7 +419,7 @@ class Welcome extends CI_Controller
 				} else {
 					$qr_data = $this->upload->data();
 					$qr_nombre = $qr_data['file_name'];
-					$this->redimensionarQR($qr_nombre);
+					// $this->redimensionarQR($qr_nombre);
 					$data = array(
 						'nombre' => $this->input->post('nombreActividad'),
 						'imagen' => $imagen_nombre,
@@ -427,7 +431,7 @@ class Welcome extends CI_Controller
 				}
 			}
 
-			redirect('Actividades');
+			redirect('welcome/actividades');
 		}
 	}
 
@@ -484,5 +488,63 @@ class Welcome extends CI_Controller
 
 	public function deleteColaborador()
 	{
+	}
+
+	public function cambiarEstadoActividad($estado)
+	{
+		$this->Programa_motivate_model->eliminarActividad($estado, 0);
+		redirect('Welcome/actividades');
+	}
+
+	public function guardar_datos()
+	{
+		if (isset($_FILES['file']['name']) && $_FILES['file']['name'] != '') {
+			$config['upload_path'] = './public/images/actividades/';
+			$config['allowed_types'] = 'xls|xlsx';
+			$fecha_actual = time();
+			$config['file_name'] = $fecha_actual . '.xlsx';
+
+			$this->load->library('upload', $config);
+			if ($this->upload->do_upload('file')) {
+				$excelFile = './public/images/actividades/' . $fecha_actual . '.xlsx';
+				$spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($excelFile);
+
+				$worksheet = $spreadsheet->getActiveSheet();
+				$data = $worksheet->toArray();
+				$datos_json = json_encode($data);
+				$dataD = json_decode($datos_json, true);
+
+				try {
+					for ($i = 0; $i < count($dataD); $i++) {
+
+						if ($dataD[$i][1] != "nombre" || $dataD[$i][2] != "apellido" || $dataD[$i][3] != "cedula" || $dataD[$i][4] != "fechaIngreso" || $dataD[$i][5] != "correoElectronico" || $dataD[$i][6] != "cargo" || $dataD[$i][7] != "id_empresa" || $dataD[$i][8] != "tipoUsuario") {
+							$data = array(
+								'nombre' => $dataD[$i][1],
+								'apellido' => $dataD[$i][2],
+								'cedula' => $dataD[$i][3],
+								'fechaIngreso' => $dataD[$i][4],
+								'correoElectronico' => $dataD[$i][5],
+								'cargo' => $dataD[$i][6],
+								'id_empresa' => $dataD[$i][7],
+								'tipoUsuario' => $dataD[$i][8],
+							);
+							$this->Programa_motivate_model->insertar_colaborador($data);
+						}
+					}
+					unset($spreadsheet);
+					if (file_exists($excelFile)) {
+						unlink($excelFile);
+					} else echo 'Error eliminado el archivo.';
+				} catch (\Throwable $th) {
+					echo 'Error al subir las datos.';
+				}
+			} else {
+				echo 'Error al subir el archivo.';
+			}
+		} else {
+			echo 'Por favor, seleccione un archivo Excel.';
+		}
+
+		redirect('welcome/admin');
 	}
 }

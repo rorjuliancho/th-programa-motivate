@@ -32,7 +32,7 @@
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="ms-2 me-auto">
                                 <div class="fw-bold">Mensaje QR:</div>
-                                <textarea rows="2" name="mensajeQr" cols="110" class="form-control" type="text"><?= $da->mensajeQr ?></textarea>
+                                <textarea rows="2" cols="110" name="mensajeQr"  class="form-control" type="text"><?= $da->mensajeQr ?></textarea>
                             </div>
                         </li>
                     </ol>
