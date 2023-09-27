@@ -1,4 +1,4 @@
-<?php if ($this->session->userdata('logueado') == TRUE) { ?>
+<?php if ($this->session->userdata('logueado') == TRUE && $this->session->userdata('tipoUsuario') == "Colaborador") { ?>
     <div class="container-fluid">
 
         <div class="row">
