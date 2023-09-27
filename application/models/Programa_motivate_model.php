@@ -24,6 +24,7 @@ class Programa_motivate_model extends CI_Model
     public function actividades()
     {
         $this->db->select('*');
+        $this->db->where('estado', 1);
         $query = $this->db->get('actividades');
 
         if ($query->num_rows() > 0) {
@@ -174,11 +175,20 @@ class Programa_motivate_model extends CI_Model
         }
     }
 
-
     public function actualizarActividad($data, $idActividad)
     {
         $this->db->where('idactividades', $idActividad);
         $this->db->update('actividades', $data);
         return true;
     }
+
+	public function eliminarActividad($idActividad, $estado)
+	{
+        $data = array(
+            'estado' => 0
+        );
+        $this->db->where('idactividades', $idActividad);
+        $this->db->update('actividades', $data);
+        return true;
+	}
 }

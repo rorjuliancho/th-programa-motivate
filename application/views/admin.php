@@ -5,6 +5,9 @@
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                     Crear colaboradores
                 </button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCargaExcel">
+                    Cargar datos
+                </button>
             </div>
             <div class="col-lg-12">
                 <table class="table">
@@ -94,7 +97,37 @@
             </div>
         </div>
     </div>
-
+    <div class="modal fade" id="modalCargaExcel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-5" id="exampleModalLabel">Cargar datos</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="<?= base_url('Welcome/guardar_datos'); ?>" enctype="multipart/form-data">
+                        <div class="outer-container">
+                            <div class="my-3">
+                                <label>Elija el archivo de Excel</label>
+                                <input type="file" name="file" id="file" accept=".xls,.xlsx">
+                            </div>
+                        </div>
+                        <div id="response" class="<?php if (!empty($type)) {echo $type . " display-block";} ?>">
+                            <?php if (!empty($message)) {
+                                echo $message;
+                            }?>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Cargar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 <?php } else { ?>
     <?php redirect('welcome/logout'); ?>
 <?php } ?>

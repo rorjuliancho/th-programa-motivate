@@ -1,8 +1,13 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+require_once ('./vendor/autoload.php');
+use PhpOffice\PhpSpreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
 class Welcome extends CI_Controller
 {
+
 	function __construct()
 	{
 		parent::__construct();
@@ -426,4 +431,68 @@ class Welcome extends CI_Controller
 			redirect('welcome/actividades');
 		}
 	}
+
+	public function cambiarEstadoActividad($estado)
+	{
+		$this->Programa_motivate_model->eliminarActividad($estado, 0);
+		redirect('Welcome/actividades');
+	}
+
+	public function guardar_datos()
+	{
+	    if(isset($_FILES['file']['name']) && $_FILES['file']['name'] != ''){
+	        $config['upload_path'] = './public/images/actividades/';
+	        $config['allowed_types'] = 'xls|xlsx';
+	        $fecha_actual = time();
+	        $config['file_name'] = $fecha_actual . '.xlsx';
+
+	        $this->load->library('upload', $config);
+	        if($this->upload->do_upload('file')){
+	            $excelFile = './public/images/actividades/' . $fecha_actual . '.xlsx';
+	            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($excelFile);
+
+	            $worksheet = $spreadsheet->getActiveSheet();
+	            $data = $worksheet->toArray();
+				$datos_json = json_encode($data);
+				$dataD = json_decode($datos_json, true);
+
+				try {
+					for ($i=0; $i < count($dataD); $i++) {
+	
+						if ($dataD[$i][1] != "nombre" || $dataD[$i][2] != "apellido" || $dataD[$i][3] != "cedula" || $dataD[$i][4] != "fechaIngreso" || $dataD[$i][5] != "correoElectronico" || $dataD[$i][6] != "cargo" || $dataD[$i][7] != "id_empresa" || $dataD[$i][8] != "tipoUsuario") {
+							$data = array(
+								'nombre' => $dataD[$i][1],
+								'apellido' => $dataD[$i][2],
+								'cedula' => $dataD[$i][3],
+								'fechaIngreso' => $dataD[$i][4],
+								'correoElectronico' => $dataD[$i][5],
+								'cargo' => $dataD[$i][6],
+								'id_empresa' => $dataD[$i][7],
+								'tipoUsuario' => $dataD[$i][8],
+							);
+							$this->Programa_motivate_model->insertar_colaborador($data);
+						}
+					}
+					unset($spreadsheet);
+					if (file_exists($excelFile)) {
+						unlink($excelFile);
+					}
+					else echo 'Error eliminado el archivo.';
+				} catch (\Throwable $th) {
+					echo 'Error al subir las datos.';
+				}
+
+
+
+	        } else {
+	            echo 'Error al subir el archivo.';
+	        }
+	    } else {
+	        echo 'Por favor, seleccione un archivo Excel.';
+	    }
+
+	    redirect('welcome/admin');
+	}
+
+
 }

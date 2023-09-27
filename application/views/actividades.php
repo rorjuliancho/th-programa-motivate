@@ -1,56 +1,29 @@
 <?php if ($this->session->userdata('tipoUsuario') == "Admin") { ?>
 
-    <div class="modal fade" id="modalVer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Actividad:</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <?php foreach ($detalleActividad as $da) { ?>
-                        <?php var_dump($da) ?>
-                        <ol class="list-group list-group-numbered">
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="ms-2 me-auto">
-                                    <div class="fw-bold">Nombre de la actividad:</div>
-                                    <input class="form-control" type="text" value="<?= $da->nombre ?>">
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="ms-2 me-auto">
-                                    <div class="fw-bold">Imagen</div>
-                                    <input type="file" class="form-control-file" name="imagen">
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="ms-2 me-auto">
-                                    <div class="fw-bold">Descripción</div>
-                                    <textarea rows="7" cols="50" class="form-control" type="text"><?= $da->descripcion ?></textarea>
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="ms-2 me-auto">
-                                    <div class="fw-bold">QR</div>
-                                    <input type="file" class="form-control-file" name="qr">
-                                </div>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="ms-2 me-auto">
-                                    <div class="fw-bold">Mensaje QR:</div>
-                                    <textarea rows="2" cols="50" class="form-control" type="text"><?= $da->mensajeQr ?></textarea>
-                                </div>
-                            </li>
-                        </ol>
-                    <?php } ?>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.eliminar-actividad').on('click', function() {
+                var idActividad = $(this).data('id');
+                $('#modalEliminar').data('id', idActividad); // Almacena el ID en el modal
+            });
+
+            $('#modalEliminar').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget); // Botón que abrió el modal
+                var idActividad = $(this).data('id'); // Obtiene el ID almacenado en el modal
+
+                // Agrega el ID al botón de confirmación del modal
+                $('#confirmarEliminar').attr('href', '<?= base_url() ?>Welcome/cambiarEstadoActividad/' + idActividad);
+            });
+        });
+    </script>
+
+
+
+
 
 
     <div class="container">
@@ -78,8 +51,9 @@
                                     <th scope="row"><?= $actividad->idactividades ?></th>
                                     <td><?= $actividad->nombre ?></td>
                                     <td>
-                                        <a href="<?= base_url() ?>Welcome/editarActividades/<?= $actividad->idactividades?>">Editar</a>
-                                         <!--<a href="#" class="stretched-link" data-toggle="modal" data-target="#modalVer">Editar </a><a href="#" class="stretched-link">Eliminar</a> -->
+                                        <a href="<?= base_url() ?>Welcome/editarActividades/<?= $actividad->idactividades ?>">Editar</a>
+                                        <!-- <a href="<?= base_url() ?>Welcome/getIdDelete/<?= $actividad->idactividades ?>"> Eliminar</a> -->
+                                        <a href="#" class="eliminar-actividad" data-id="<?= $actividad->idactividades ?>" data-toggle="modal" data-target="#modalEliminar"> Eliminar</a>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -125,12 +99,28 @@
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
     </div>
-
+    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-5" id="exampleModalLabel">Eliminar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body"> ¿Estás seguro de eliminar esta actividad?
+                </div>
+                <div class="modal-footer">
+                    <a type="button" class="btn btn-secondary" data-dismiss="modal" style="color: white;">Cerrar</a>
+                    <a type="button" id="confirmarEliminar" class="btn btn-primary">Eliminar</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 <?php } else { ?>
