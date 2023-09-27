@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-require_once ('./vendor/autoload.php');
+require_once('./vendor/autoload.php');
+
 use PhpOffice\PhpSpreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -26,6 +27,7 @@ class Welcome extends CI_Controller
 	{
 		$cedula = $this->input->post('cedula');
 		$login = $this->Programa_motivate_model->login($cedula);
+
 		if ($login) {
 			if ($login[0]->tipoUsuario == "Colaborador") {
 				$userLogin = array(
@@ -349,6 +351,7 @@ class Welcome extends CI_Controller
 		}
 		return $mensajeBienvenida;
 	}
+
 	public function informacionUsuario()
 	{
 		$nombres = $this->session->userdata('nombre');
@@ -432,6 +435,61 @@ class Welcome extends CI_Controller
 		}
 	}
 
+	public function viewColaborador($id)
+	{
+
+		$result['mensajeBienvenida'] = $this->horarioUsuario();
+		$result['nombre'] = $this->informacionUsuario();
+		$result['traerColaboradores'] = $this->Programa_motivate_model->traerColaboradoresById($id);
+		$result['puntajeColaborador'] = $this->Programa_motivate_model->puntosActividadColaborador($id);
+
+		$this->load->view('main/header', $result);
+		$this->load->view('viewColaborador', $result);
+		$this->load->view('main/footer');
+	}
+
+	public function editColaborador($id)
+	{
+		$result['mensajeBienvenida'] = $this->horarioUsuario();
+		$result['nombre'] = $this->informacionUsuario();
+		$result['empresa'] = $this->Programa_motivate_model->traerEmpresas();
+		$result['traerColaboradores'] = $this->Programa_motivate_model->traerColaboradoresById($id);
+		$result['puntajeColaborador'] = $this->Programa_motivate_model->puntosActividadColaborador($id);
+
+		$this->load->view('main/header', $result);
+		$this->load->view('editColaborador', $result);
+		$this->load->view('main/footer');
+	}
+
+	public function actualizarColaborador()
+	{
+		$id = $this->input->post('id');
+		$nombre = $this->input->post('nombre');
+		$apellido = $this->input->post('apellido');
+		$cedula = $this->input->post('cedula');
+		$fechaIngreso = $this->input->post('fechaIngreso');
+		$email = $this->input->post('email');
+		$cargo = $this->input->post('cargo');
+		$empresa = $this->input->post('empresa');
+
+		$data = array(
+			'nombre' => $nombre,
+			'apellido' => $apellido,
+			'cedula' => $cedula,
+			'fechaIngreso' => $fechaIngreso,
+			'correoElectronico' => $email,
+			'cargo' => $cargo,
+			'id_empresa' => $empresa,
+		);
+
+		$this->Programa_motivate_model->actualizarColaborador($data, $id);
+		return ('Welcome/editColaborador/' . $id);
+	}
+
+	public function deleteColaborador()
+	{
+	}
+
 	public function cambiarEstadoActividad($estado)
 	{
 		$this->Programa_motivate_model->eliminarActividad($estado, 0);
@@ -440,25 +498,25 @@ class Welcome extends CI_Controller
 
 	public function guardar_datos()
 	{
-	    if(isset($_FILES['file']['name']) && $_FILES['file']['name'] != ''){
-	        $config['upload_path'] = './public/images/actividades/';
-	        $config['allowed_types'] = 'xls|xlsx';
-	        $fecha_actual = time();
-	        $config['file_name'] = $fecha_actual . '.xlsx';
+		if (isset($_FILES['file']['name']) && $_FILES['file']['name'] != '') {
+			$config['upload_path'] = './public/images/actividades/';
+			$config['allowed_types'] = 'xls|xlsx';
+			$fecha_actual = time();
+			$config['file_name'] = $fecha_actual . '.xlsx';
 
-	        $this->load->library('upload', $config);
-	        if($this->upload->do_upload('file')){
-	            $excelFile = './public/images/actividades/' . $fecha_actual . '.xlsx';
-	            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($excelFile);
+			$this->load->library('upload', $config);
+			if ($this->upload->do_upload('file')) {
+				$excelFile = './public/images/actividades/' . $fecha_actual . '.xlsx';
+				$spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($excelFile);
 
-	            $worksheet = $spreadsheet->getActiveSheet();
-	            $data = $worksheet->toArray();
+				$worksheet = $spreadsheet->getActiveSheet();
+				$data = $worksheet->toArray();
 				$datos_json = json_encode($data);
 				$dataD = json_decode($datos_json, true);
 
 				try {
-					for ($i=0; $i < count($dataD); $i++) {
-	
+					for ($i = 0; $i < count($dataD); $i++) {
+
 						if ($dataD[$i][1] != "nombre" || $dataD[$i][2] != "apellido" || $dataD[$i][3] != "cedula" || $dataD[$i][4] != "fechaIngreso" || $dataD[$i][5] != "correoElectronico" || $dataD[$i][6] != "cargo" || $dataD[$i][7] != "id_empresa" || $dataD[$i][8] != "tipoUsuario") {
 							$data = array(
 								'nombre' => $dataD[$i][1],
@@ -476,23 +534,17 @@ class Welcome extends CI_Controller
 					unset($spreadsheet);
 					if (file_exists($excelFile)) {
 						unlink($excelFile);
-					}
-					else echo 'Error eliminado el archivo.';
+					} else echo 'Error eliminado el archivo.';
 				} catch (\Throwable $th) {
 					echo 'Error al subir las datos.';
 				}
+			} else {
+				echo 'Error al subir el archivo.';
+			}
+		} else {
+			echo 'Por favor, seleccione un archivo Excel.';
+		}
 
-
-
-	        } else {
-	            echo 'Error al subir el archivo.';
-	        }
-	    } else {
-	        echo 'Por favor, seleccione un archivo Excel.';
-	    }
-
-	    redirect('welcome/admin');
+		redirect('welcome/admin');
 	}
-
-
 }
