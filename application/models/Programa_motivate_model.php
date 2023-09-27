@@ -177,9 +177,42 @@ class Programa_motivate_model extends CI_Model
 
     public function actualizarActividad($data, $idActividad)
     {
-        $this->db->update('actividades',$data);
-        $this->db->where('idactividades',$idActividad);
+        $this->db->update('actividades', $data);
+        $this->db->where('idactividades', $idActividad);
         return true;
+    }
 
+
+    public function viewColaboradorId($id)
+    {
+        $this->db->select('*');
+        $this->db->where("idactividades", $id);
+        $query = $this->db->get('actividades');
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return false;
+        }
+    }
+
+    public function traerColaboradoresById($id)
+    {
+        $this->db->select('e.nombre as nombreempresa, c.nombre as nombrecolab, e.nombre as nombre_empresa,e.*, c.*');
+        $this->db->where('c.idcolaborador', $id);
+        $this->db->join('empresa e', 'e.idempresa = c.id_empresa');
+        $this->db->order_by('c.idcolaborador', 'asc');
+        $query = $this->db->get('colaborador c');
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return false;
+        }
+    }
+
+    public function actualizarColaborador($data, $id)
+    {
+        $this->db->update('colaborador', $data);
+        $this->db->where('idcolaborador', $id);
+        return true;
     }
 }

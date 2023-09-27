@@ -21,6 +21,7 @@ class Welcome extends CI_Controller
 	{
 		$cedula = $this->input->post('cedula');
 		$login = $this->Programa_motivate_model->login($cedula);
+
 		if ($login) {
 			if ($login[0]->tipoUsuario == "Colaborador") {
 				$userLogin = array(
@@ -346,6 +347,7 @@ class Welcome extends CI_Controller
 		}
 		return $mensajeBienvenida;
 	}
+
 	public function informacionUsuario()
 	{
 		$nombres = $this->session->userdata('nombre');
@@ -427,5 +429,60 @@ class Welcome extends CI_Controller
 
 			redirect('Actividades');
 		}
+	}
+
+	public function viewColaborador($id)
+	{
+
+		$result['mensajeBienvenida'] = $this->horarioUsuario();
+		$result['nombre'] = $this->informacionUsuario();
+		$result['traerColaboradores'] = $this->Programa_motivate_model->traerColaboradoresById($id);
+		$result['puntajeColaborador'] = $this->Programa_motivate_model->puntosActividadColaborador($id);
+
+		$this->load->view('main/header', $result);
+		$this->load->view('viewColaborador', $result);
+		$this->load->view('main/footer');
+	}
+
+	public function editColaborador($id)
+	{
+		$result['mensajeBienvenida'] = $this->horarioUsuario();
+		$result['nombre'] = $this->informacionUsuario();
+		$result['empresa'] = $this->Programa_motivate_model->traerEmpresas();
+		$result['traerColaboradores'] = $this->Programa_motivate_model->traerColaboradoresById($id);
+		$result['puntajeColaborador'] = $this->Programa_motivate_model->puntosActividadColaborador($id);
+
+		$this->load->view('main/header', $result);
+		$this->load->view('editColaborador', $result);
+		$this->load->view('main/footer');
+	}
+
+	public function actualizarColaborador()
+	{
+		$id = $this->input->post('id');
+		$nombre = $this->input->post('nombre');
+		$apellido = $this->input->post('apellido');
+		$cedula = $this->input->post('cedula');
+		$fechaIngreso = $this->input->post('fechaIngreso');
+		$email = $this->input->post('email');
+		$cargo = $this->input->post('cargo');
+		$empresa = $this->input->post('empresa');
+
+		$data = array(
+			'nombre' => $nombre,
+			'apellido' => $apellido,
+			'cedula' => $cedula,
+			'fechaIngreso' => $fechaIngreso,
+			'correoElectronico' => $email,
+			'cargo' => $cargo,
+			'id_empresa' => $empresa,
+		);
+
+		$this->Programa_motivate_model->actualizarColaborador($data, $id);
+		return ('Welcome/editColaborador/' . $id);
+	}
+
+	public function deleteColaborador()
+	{
 	}
 }

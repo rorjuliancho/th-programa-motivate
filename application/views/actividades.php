@@ -61,7 +61,7 @@
                 </button>
             </div>
             <div class="col-lg-12">
-                <table class="table">
+                <table class="table" id="table-actividades">
                     <thead>
                         <tr>
                             <th scope="col">Imagen</th>

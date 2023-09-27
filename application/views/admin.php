@@ -7,32 +7,40 @@
                 </button>
             </div>
             <div class="col-lg-12">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Apellido</th>
-                            <th scope="col">Cedula</th>
-                            <th scope="col">Empresa</th>
-                            <th scope="col">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if ($todosColaboradores) { ?>
-                            <?php foreach ($todosColaboradores as $colab) { ?>
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-striped" id="table-colaboradores">
+                            <thead>
                                 <tr>
-                                    <th scope="row"><?= $colab->idcolaborador ?></th>
-                                    <td><?= $colab->nombrecolab ?></td>
-                                    <td><?= $colab->apellido ?></td>
-                                    <td><?= $colab->cedula ?></td>
-                                    <td><?= $colab->nombreempresa ?></td>
-                                    <td><a href="#" class="stretched-link">Ver </a><a href="#" class="stretched-link">Editar </a><a href="#" class="stretched-link">Eliminar</a></td>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Apellido</th>
+                                    <th scope="col">Cedula</th>
+                                    <th scope="col">Empresa</th>
+                                    <th scope="col">Acciones</th>
                                 </tr>
-                            <?php } ?>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                            </thead>
+                            <tbody>
+                                <?php if ($todosColaboradores) { ?>
+                                    <?php foreach ($todosColaboradores as $colab) { ?>
+                                        <tr>
+                                            <th scope="row"><?= $colab->idcolaborador ?></th>
+                                            <td><?= $colab->nombrecolab ?></td>
+                                            <td><?= $colab->apellido ?></td>
+                                            <td><?= $colab->cedula ?></td>
+                                            <td><?= $colab->nombreempresa ?></td>
+                                            <td><a class="btn btn-primary" href="<?= base_url() ?>Welcome/viewColaborador/<?= $colab->idcolaborador ?>" class="stretched-link"><i class="fas fa fa-eye"></i> </a>
+                                                <a class="btn btn-success" href="<?= base_url() ?>Welcome/editColaborador/<?= $colab->idcolaborador ?>" class="stretched-link"><i class="fas fa fa-edit"></i> </a>
+                                                <a class="btn btn-danger" href="<?= base_url() ?>Welcome/deleteColaborador/<?= $colab->idcolaborador ?>" class="stretched-link"><i class="fas fa fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
