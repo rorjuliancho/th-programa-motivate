@@ -180,6 +180,8 @@ class Welcome extends CI_Controller
 
 	public function guardar_colaborador()
 	{
+		date_default_timezone_set("America/Bogota");
+		$date = date('Y-m-d H:i:s');
 		$data = array(
 			'nombre' => $this->input->post('nombre'),
 			'apellido' => $this->input->post('apellido'),
@@ -187,11 +189,29 @@ class Welcome extends CI_Controller
 			'fechaIngreso' => $this->input->post('fechaIngreso'),
 			'correoElectronico' => $this->input->post('correoElectronico'),
 			'id_empresa' => $this->input->post('id_empresa'),
+			'cargo' => $this->input->post('cargo'),
 			'tipoUsuario' => $this->input->post('tipoUsuario'),
+			'estado' => 1
 		);
 
-		// Llama al método del modelo para realizar la inserción
 		$this->Programa_motivate_model->insertar_colaborador($data);
+
+		$last_id = $this->Programa_motivate_model->last_id();
+		$cantActividades = $this->Programa_motivate_model->cantidadActividades();
+
+		for ($i = 1; $i <= $cantActividades[0]->cantidad_actividades; $i++) {
+			$dataPuntos = array(
+				'puntos' => 0,
+				'fechaCreacion' => $date,
+				'idColaborador' => $last_id[0]->idcolaborador,
+				'idActividad' => $i,
+				'estado' => 0
+			);
+			$this->Programa_motivate_model->insertarPuntosNuevoColaborador($dataPuntos);
+		}
+
+
+
 
 		$this->admin();
 	}
@@ -372,16 +392,6 @@ class Welcome extends CI_Controller
 		$qr = $_FILES['qr']['name'];
 		$mensajeQr = $this->input->post('mensajeQr');
 
-		// echo ($nombreActividad);
-		// echo ($iconoActividad);
-		// echo ($descripcion);
-		// echo ($qr);
-		// echo ($mensajeQr);
-
-
-		// si la imagen es vacia entonces deje los cambios
-		// si la imagen es diferente a vacia realice el update
-		// cuando es vacia la variable 
 		if (empty($iconoActividad) || empty($qr)) {
 			$data = array(
 				'nombre' => $nombreActividad,
@@ -486,8 +496,10 @@ class Welcome extends CI_Controller
 		return ('Welcome/editColaborador/' . $id);
 	}
 
-	public function deleteColaborador()
+	public function deleteColaborador($id)
 	{
+		$this->Programa_motivate_model->deleteColaborador($id);
+		redirect('Welcome/admin');
 	}
 
 	public function cambiarEstadoActividad($estado)
@@ -546,5 +558,63 @@ class Welcome extends CI_Controller
 		}
 
 		redirect('welcome/admin');
+	}
+
+	public function agregarPuntajeColaborador()
+	{
+		date_default_timezone_set("America/Bogota");
+		$date = date('Y-m-d H:i:s');
+
+		$idColaborador = $this->input->post('idColaborador');
+		$idActividad = $this->input->post('idCActividad');
+
+		$nombreActividad = $this->input->post('nombraActividad');
+		$puntaje = $this->input->post('puntajeActividad');
+		$Observaciones = $this->input->post('observacionesActividad');
+
+		$data = array(
+			'puntos' => $puntaje,
+			'fechaCreacion' => $date,
+			'idColaborador' => $idColaborador,
+			'idActividad' => $idActividad,
+			'observaciones' => $Observaciones,
+			'nombreActividad' => $nombreActividad
+		);
+
+		$this->Programa_motivate_model->insertPuntajeColaborador($data);
+
+		redirect('Welcome/editColaborador/' . $idColaborador);
+	}
+
+	public function editarActividad($idColaborador, $idActividad)
+	{
+		$result['mensajeBienvenida'] = $this->horarioUsuario();
+		$result['nombre'] = $this->informacionUsuario();
+
+		$result['actividadColaborador'] = $this->Programa_motivate_model->actividadColaborador($idColaborador, $idActividad);
+
+		$this->load->view('main/header', $result);
+		$this->load->view('editarActividad');
+		$this->load->view('main/footer');
+	}
+
+	public function updateActividadColaborador()
+	{
+		$idPuntos = $this->input->post('idPuntuacion');
+
+		$nombraActividad = $this->input->post('nombraActividad');
+		$puntajeActividad = $this->input->post('puntajeActividad');
+		$observacionesActividad = $this->input->post('observacionesActividad');
+
+
+		$data = array(
+			'puntos' => $puntajeActividad,
+			'nombreActividad' => $nombraActividad,
+			'observaciones' => $observacionesActividad,
+		);
+
+		$this->Programa_motivate_model->updatePuntosColaborador($data, $idPuntos);
+
+		redirect('');
 	}
 }

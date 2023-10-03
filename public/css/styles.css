@@ -119,13 +119,15 @@ p {
 }
 
 .puntos {
-    background-color: #ffffff;
+    background-color: #2f1160;
     padding: 5px;
     border-radius: 20px;
 }
 
 .actividad {
     background-color: #EAE8FF;
+    border-radius: 30px;
+    height: 100%;
 }
 
 .actividad :hover {
@@ -210,7 +212,9 @@ body {
     padding-right: 10%;
 }
 
-
+.border{
+    border-radius: 20px;
+}
 
 
 

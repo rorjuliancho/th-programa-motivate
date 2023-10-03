@@ -108,12 +108,13 @@ class Programa_motivate_model extends CI_Model
 
     public function puntosActividadColaborador($idColaborador)
     {
-        $this->db->select('a.idActividades,a.nombre,a.imagen,a.idactividades');
+        $this->db->select('a.idActividades,a.nombre as nombre_actividad,a.imagen, c.*');
         $this->db->select_sum('puntos', 'puntuacion');
         $this->db->join('actividades a', 'a.idactividades = p.idActividad');
-        $this->db->where('idColaborador', $idColaborador);
+        $this->db->join('colaborador c', 'c.idcolaborador = p.idColaborador');
+        $this->db->where('c.idcolaborador', $idColaborador);
         $this->db->group_by('p.idActividad');
-        $this->db->order_by('idActividad', 'asc');
+        $this->db->order_by('p.idActividad', 'asc');
         $query = $this->db->get('puntuacion p');
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -132,6 +133,7 @@ class Programa_motivate_model extends CI_Model
     public function traerColaboradores()
     {
         $this->db->select('e.nombre as nombreempresa, c.nombre as nombrecolab, e.*, c.*');
+        $this->db->where('c.estado !=', '0');
         $this->db->join('empresa e', 'e.idempresa = c.id_empresa');
         $this->db->order_by('c.idcolaborador', 'asc');
         $query = $this->db->get('colaborador c');
@@ -211,8 +213,8 @@ class Programa_motivate_model extends CI_Model
 
     public function actualizarColaborador($data, $id)
     {
-        $this->db->update('colaborador', $data);
         $this->db->where('idcolaborador', $id);
+        $this->db->update('colaborador', $data);
         return true;
     }
 
@@ -224,5 +226,72 @@ class Programa_motivate_model extends CI_Model
         $this->db->where('idactividades', $idActividad);
         $this->db->update('actividades', $data);
         return true;
+    }
+
+    public function insertPuntajeColaborador($data)
+    {
+        $this->db->insert('puntuacion', $data);
+    }
+
+    public function actividadColaborador($idColaborador, $idActividad)
+    {
+        $this->db->select('*');
+        $this->db->where("idColaborador", $idColaborador);
+        $this->db->where("idActividad", $idActividad);
+        $this->db->join('actividades a', 'a.idactividades = p.idActividad');
+        $query = $this->db->get('puntuacion p');
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return false;
+        }
+    }
+
+    public function updatePuntosColaborador($data, $idPuntos)
+    {
+        $this->db->where('idpuntuacion', $idPuntos);
+        $this->db->update('puntuacion', $data);
+
+        return true;
+    }
+
+    public function deleteColaborador($id)
+    {
+        $data = array(
+            'estado' => 0
+        );
+        $this->db->where('idcolaborador', $id);
+        $this->db->update('colaborador', $data);
+        return true;
+    }
+
+    public function cantidadActividades()
+    {
+        $this->db->select('count(*) as cantidad_actividades');
+        $query = $this->db->get('actividades');
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return false;
+        }
+    }
+
+    public function last_id()
+    {
+        $this->db->select('idcolaborador');
+        $this->db->order_by('idcolaborador', 'desc');
+        $this->db->limit(1);
+        $query = $this->db->get('colaborador');
+
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return false;
+        }
+    }
+
+    public function insertarPuntosNuevoColaborador($data)
+    {
+        $this->db->insert('puntuacion', $data);
     }
 }

@@ -1,19 +1,19 @@
-<?php if ($this->session->userdata('logueado') == TRUE && $this->session->userdata('tipoUsuario') == "Colaborador") { ?>
+<?php if ($this->session->userdata('logueado') == TRUE) { ?>
     <div class="container-fluid">
 
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-12 mt-4">
-                <h3 class="nombre_usuario">Bienvenid@ <?= $this->session->userdata('nombre') ?> <?= $this->session->userdata('apellido') ?></h3>
+                <h3 class="nombre_usuario">Bienvenid@ <br> <?= $this->session->userdata('nombre') ?> <?= $this->session->userdata('apellido') ?></h3>
                 <p> <?php date_default_timezone_set("America/Bogota") ?>
                     <?= date('d-m-Y') ?>
                 </p>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-12 mt-4 text-center my-auto">
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-puntos puntos parpadea" data-toggle="modal" data-target="#exampleModalPuntuacion">
+            <div class="col-lg-6 col-md-6 col-sm-12 mt-4 text-center my-auto ">
+                <button type="button" class="btn btn-puntos puntos parpadea p-3 " data-toggle="modal" data-target="#exampleModalPuntuacion">
                     <?php if ($puntuacion) { ?>
                         <?php foreach ($puntuacion as $a) { ?>
-                            <img class="img-fluid" src="<?= base_url() ?>public/images/icons/start.png" alt=""> <strong> <?= $a->puntuacion ?> Puntos</strong>
+                            <img class="img-fluid" src="<?= base_url() ?>public/images/icons/start.png" alt="">
+                            <h3><strong class="text-white"><?= $a->puntuacion ?> Puntos</strong></h3>
                         <?php } ?>
                     <?php } ?>
                 </button>
@@ -30,18 +30,15 @@
                 <?php
                 $posicion = 1;
                 foreach ($top as $t) { ?>
-
                     <div class="col-lg-2 col-md-2 col-sm-12 mb-2 ml-especial-score">
-                        <div class="card">
+                        <div class="card border">
                             <?php if ($posicion == 1) { ?>
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-4 p-2">
                                             <img src="<?= base_url() ?>public/images/icons/1.png" alt="" class="img-fluid">
                                         </div>
-
                                         <div class="col-8 p-2 my-auto">
-                                            <h5 class="card-title">
                                                 <?php $nombre = explode(' ', $t->nombre); ?>
                                                 <?php $primernombre = $nombre[0] ?>
                                                 <?php $apellido = explode(' ', $t->apellido); ?>
@@ -49,19 +46,14 @@
                                                 <h5><?= $primernombre ?> <br> <?= $primerapellido ?></h5>
                                                 <h6 class="card-text">Puntos: <strong><?= $t->puntuacion ?></strong></h6>
                                         </div>
-
                                     </div>
                                 </div>
-
                             <?php } else if ($posicion == 2) { ?>
-
-
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-4 p-2">
                                             <img src="<?= base_url() ?>public/images/icons/2.png" alt="" class="img-fluid">
                                         </div>
-
                                         <div class="col-8 p-2 my-auto">
                                             <?php $nombre = explode(' ', $t->nombre); ?>
                                             <?php $primernombre = $nombre[0] ?>
@@ -70,19 +62,14 @@
                                             <h5> <?= $primernombre ?> <br> <?= $primerapellido ?></h5>
                                             <h6 class="card-text">Puntos: <strong><?= $t->puntuacion ?></strong></h6>
                                         </div>
-
                                     </div>
                                 </div>
-
                             <?php } else if ($posicion == 3) { ?>
-
-
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-4 p-2">
                                             <img src="<?= base_url() ?>public/images/icons/3.png" alt="" class="img-fluid">
                                         </div>
-
                                         <div class="col-8 p-2 my-auto">
                                             <?php $nombre = explode(' ', $t->nombre); ?>
                                             <?php $primernombre = $nombre[0] ?>
@@ -91,17 +78,14 @@
                                             <h5><?= $primernombre ?> <br> <?= $primerapellido ?></h5>
                                             <h6 class="card-text">Puntos: <strong><?= $t->puntuacion ?></strong></h6>
                                         </div>
-
                                     </div>
                                 </div>
                             <?php } else if ($posicion == 4) { ?>
-
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-4 p-2">
                                             <img src="<?= base_url() ?>public/images/icons/4.png" alt="" class="img-fluid">
                                         </div>
-
                                         <div class="col-8 p-2 my-auto">
                                             <?php $nombre = explode(' ', $t->nombre); ?>
                                             <?php $primernombre = $nombre[0] ?>
@@ -110,7 +94,6 @@
                                             <h5><?= $primernombre ?> <br> <?= $primerapellido ?></h5>
                                             <h6 class="card-text">Puntos: <strong><?= $t->puntuacion ?></strong></h6>
                                         </div>
-
                                     </div>
                                 </div>
                             <?php } else { ?>
@@ -119,7 +102,6 @@
                                         <div class="col-4 p-2">
                                             <img src="<?= base_url() ?>public/images/icons/5.png" alt="" class="img-fluid">
                                         </div>
-
                                         <div class="col-8 p-2 my-auto">
                                             <?php $nombre = explode(' ', $t->nombre); ?>
                                             <?php $primernombre = $nombre[0] ?>
@@ -128,7 +110,6 @@
                                             <h5><?= $primernombre ?> <br> <?= $primerapellido ?></h5>
                                             <h6 class="card-text">Puntos: <strong><?= $t->puntuacion ?></strong></h6>
                                         </div>
-
                                     </div>
                                 </div>
                             <?php } ?>
@@ -204,27 +185,26 @@
             <div class="row">
                 <?php if ($puntosColaborador) { ?>
                     <?php foreach ($puntosColaborador as $a) { ?>
-                        <!--?php foreach ($actividades as $a) { ?-->
-                        <div class="col-lg-2 col-md-6 col-sm-6 p-3  w-25 ">
+                        <div class="col-lg-4 p-3">
                             <div class="card my-auto actividad">
                                 <div class="card-body">
                                     <div class="container">
-                                        <div class="row  text-center">
-                                            <div class="col-lg-4 col-md-4 col-sm-12">
+                                        <div class="row ">
+                                            <div class="col-lg-2 col-md-2 col-sm-12 my-auto">
                                                 <img style="width: 2.9em; height: 2.9em;" src="<?= base_url() ?>public/images/actividades/<?= $a->imagen ?>" alt="Programa Motivate">
                                             </div>
-                                            <div class="col-lg-8 col-md-8 col-sm-12 my-auto">
+                                            <div class="col-lg-10 col-md-10 col-sm-12 my-auto">
                                                 <h5><?= $a->puntuacion ?> puntos</h5>
+                                                <p><?= $a->nombre_actividad  ?></p>
+                                                <div class="text-right">
+                                                    <a href="<?= base_url() ?>welcome/activity/<?= $a->idActividades ?>"> Ver Detalle > </a>
+                                                </div>
                                             </div>
                                         </div>
-
-                                        <p><?= $a->nombre  ?></p>
-                                        <a href="<?= base_url() ?>welcome/activity/<?= $a->idactividades ?>"> Ver Detalle > </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!--?php } ?-->
                     <?php } ?>
                 <?php } ?>
             </div>

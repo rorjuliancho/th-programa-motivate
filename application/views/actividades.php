@@ -1,65 +1,44 @@
 <?php if ($this->session->userdata('tipoUsuario') == "Admin") { ?>
-
-
-
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-
-    <script>
-        $(document).ready(function() {
-            $('.eliminar-actividad').on('click', function() {
-                var idActividad = $(this).data('id');
-                $('#modalEliminar').data('id', idActividad); // Almacena el ID en el modal
-            });
-
-            $('#modalEliminar').on('show.bs.modal', function(event) {
-                var button = $(event.relatedTarget); // Botón que abrió el modal
-                var idActividad = $(this).data('id'); // Obtiene el ID almacenado en el modal
-
-                // Agrega el ID al botón de confirmación del modal
-                $('#confirmarEliminar').attr('href', '<?= base_url() ?>Welcome/cambiarEstadoActividad/' + idActividad);
-            });
-        });
-    </script>
-
-
-
-
-
-
     <div class="container">
         <div class="row">
-            <div class="col-lg-6 my-3">
+            <div class="col-6 pb-2">
+                <a class="btn btn-danger" href="<?= base_url() ?>Welcome/admin"><i class="fas fa fa-arrow-left"></i> Regresar</a>
+            </div>
+            <div class="col-6 text-right">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                    Crear actividades
+                    <i class="fas fa fa-plus"></i> Crear actividades
                 </button>
             </div>
-            <div class="col-lg-12">
-                <table class="table" id="table-actividades">
-                    <thead>
-                        <tr>
-                            <th scope="col">Imagen</th>
-                            <th scope="col">Id Actividades</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if ($todasActividades) { ?>
-                            <?php foreach ($todasActividades as $actividad) { ?>
+            <div class="col-lg-12 pb-5">
+                <div class="card ">
+                    <div class="card-body">
+                        <table class="table table-striped" id="table-actividades">
+                            <thead>
                                 <tr>
-                                    <td><img style="width: 3em; height: 3em;" class="img-fluid" src="<?= base_url() ?>public/images/actividades/<?= $actividad->imagen ?>"></td>
-                                    <th scope="row"><?= $actividad->idactividades ?></th>
-                                    <td><?= $actividad->nombre ?></td>
-                                    <td>
-                                        <a href="<?= base_url() ?>Welcome/editarActividades/<?= $actividad->idactividades ?>">Editar</a>
-                                        <!-- <a href="<?= base_url() ?>Welcome/getIdDelete/<?= $actividad->idactividades ?>"> Eliminar</a> -->
-                                        <a href="#" class="eliminar-actividad" data-id="<?= $actividad->idactividades ?>" data-toggle="modal" data-target="#modalEliminar"> Eliminar</a>
-                                    </td>
+                                    <th scope="col">Imagen</th>
+                                    <th scope="col">Id Actividades</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Acciones</th>
                                 </tr>
-                            <?php } ?>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                            </thead>
+                            <tbody class="text-center">
+                                <?php if ($todasActividades) { ?>
+                                    <?php foreach ($todasActividades as $actividad) { ?>
+                                        <tr>
+                                            <td><img style="width: 3em; height: 3em;" class="img-fluid" src="<?= base_url() ?>public/images/actividades/<?= $actividad->imagen ?>"></td>
+                                            <th scope="row"><?= $actividad->idactividades ?></th>
+                                            <td><?= $actividad->nombre ?></td>
+                                            <td>
+                                                <a class="btn btn-primary btn-sm" href="<?= base_url() ?>Welcome/editarActividades/<?= $actividad->idactividades ?>"><i class="fas fa fa-edit"></i></a>
+                                                <a class="btn btn-danger btn-sm" href="#" class="eliminar-actividad" data-id="<?= $actividad->idactividades ?>" data-toggle="modal" data-target="#modalEliminar"> <i class="fas fa fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -103,6 +82,8 @@
             </div>
         </div>
     </div>
+
+
     <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
